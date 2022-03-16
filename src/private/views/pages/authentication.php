@@ -21,8 +21,8 @@
             <h1 class="h3 mt-3 fw-normal text-center">Please sign in</h1>
 
             <div class="form-floating mt-3 w-75 mx-auto">
-                <input type="email" class="form-control email" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
+                <input type="text" class="form-control email" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Email address or username</label>
             </div>
             <div class="form-floating mt-5 w-75 mx-auto">
                 <input type="password" class="form-control password" id="floatingPassword" placeholder="Password">

@@ -24,6 +24,35 @@ class Pages extends Controller
     {
         $this->view('/pages/signup');
     }
+    public function viewpost()
+    {
+        $this->view('/pages/post');
+    }
+    public function post()
+    {
+
+        // starting session
+        // session_start();
+
+        // setting location for file to be stored
+        $target_file = "../public/img/" . basename($_FILES["fileToUpload"]["name"]);
+
+        // moving file to upload folder
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            //     // varaiable to hold file name
+            $name = basename($_FILES["fileToUpload"]["name"]);
+            $post = $this->model('Posts');
+            $post->user_id = $_GET['id'];
+            $post->name = $_GET['name'];
+            $post->post_body = $_POST['postText'];
+            $post->likes = 0;
+            $post->file = '../public/img/' . $name;
+            $post->save();
+            header('Location:/');
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
     public function operation()
     {
 
@@ -62,6 +91,42 @@ class Pages extends Controller
                     break;
                 case 'getUserId':
                     $data = $this->model('Users')::find('all', array('conditions' => array('user_id = ?', $_POST['user_id'])));
+                    break;
+                case 'getPosts':
+                    $data = $this->model('Posts')::all();
+                    break;
+                case 'getUserPost':
+                    $data = $this->model('Posts')::find('all', array('conditions' => array('user_id = ?', $_POST['user_id'])));
+                    break;
+                case 'getOtherPosts':
+                    $data = $this->model('Posts')::find('all', array('conditions' => array('user_id != ?', $_POST['user_id'])));
+                    break;
+                case 'getPost':
+                    $data = $this->model('Posts')::find('all', array('conditions' => array('post_id = ?', $_POST['id'])));
+                    break;
+                case 'getStats':
+                    $data = $this->model('Stats')::find('all', array('conditions' => array('post_id = ?', $_POST['id'])));
+                    break;
+                case 'updateStats':
+                    $post =
+                        $this->model('Stats')::find_by_post_id($_POST['id']);
+                    $post->stats = $_POST['stats'];
+                    $post->save();
+                    $data = $this->model('Stats')::find('all', array('conditions' => array('post_id = ?', $_POST['id'])));
+                    break;
+                case 'getCircle':
+                    $data = $this->model('Circles')::all();
+                    break;
+                case 'updateCircle':
+                    $circle =
+                        $this->model('Circles')::find_by_user_id($_POST['id']);
+                    $circle->circle = $_POST['circles'];
+                    $circle->save();
+                    $data = $this->model('Circles')::find('all', array('conditions' => array('user_id = ?', $_POST['id'])));
+                    break;
+                case 'getFriend':
+                    $data =
+                        $this->model('Users')::find('all', array('conditions' => array('user_id = ?', $_POST['id'])));
                     break;
             }
         }

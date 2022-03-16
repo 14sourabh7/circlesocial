@@ -14,7 +14,9 @@
 <body>
     <?php
     include '../private/views/components/navbarHome.php';
-
+    include '../private/views/components/postModal.php';
+    include '../private/views/components/tab.php';
+    include '../private/views/components/posts.php';
     include '../private/views/components/footer.php';
     ?>
 </body>

@@ -4,7 +4,7 @@
             <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
                 <span class="font-weight-bold profileName"></span>
                 <span class="text-black-50 profileEmail"></span>
-                <span> </span>
+                <span class='btn btn-success follow'>follow</span>
             </div>
         </div>
         <div class="col-md-5 border-right">
@@ -31,6 +31,18 @@
                 </div>
                 <p class="text-danger" id='profileError'></p>
                 <!-- <div class="mt-5 text-center"><button class="btn btn-primary profile-button profileSave" type="button">Save Profile</button></div> -->
+            </div>
+        </div>
+        <div class="col-md-4 border-right listFriend" style="display:none">
+            <div class="d-flex flex-column align-items-center bg-light shadow-sm text-center p-3 py-5">
+                <span class="btn text-success ">Friends</span>
+                <div class="friends">
+
+                </div>
+                <span class="btn text-success ">All Users</span>
+                <div class="users">
+
+                </div>
             </div>
         </div>
     </div>

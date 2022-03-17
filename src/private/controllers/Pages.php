@@ -45,9 +45,14 @@ class Pages extends Controller
             $post->user_id = $_GET['id'];
             $post->name = $_GET['name'];
             $post->post_body = $_POST['postText'];
-            $post->likes = 0;
             $post->file = '../public/img/' . $name;
             $post->save();
+            $last_id = $this->model('Posts')::last();
+            $stats = $this->model('Stats');
+            $stats->post_id = $last_id->post_id;
+
+            $stats->stats = '{"likes": [], "comments": []}';
+            $stats->save();
             header('Location:/');
         } else {
             echo "Sorry, there was an error uploading your file.";
@@ -82,7 +87,9 @@ class Pages extends Controller
 
                     $user->save();
                     $data = $this->model('Users')::find('all', array('conditions' => array('email = ?', $_POST['email'])));
+
                     break;
+
                 case 'getUser':
                     $data = $this->model('Users')::find_all_by_name_or_username($_POST['value'], $_POST['value']);
                     break;
@@ -115,7 +122,7 @@ class Pages extends Controller
                     $data = $this->model('Stats')::find('all', array('conditions' => array('post_id = ?', $_POST['id'])));
                     break;
                 case 'getCircle':
-                    $data = $this->model('Circles')::all();
+                    $data = $this->model('Circles')::find('all', array('conditions' => array('user_id = ?', $_POST['user_id'])));
                     break;
                 case 'updateCircle':
                     $circle =
@@ -128,6 +135,25 @@ class Pages extends Controller
                     $data =
                         $this->model('Users')::find('all', array('conditions' => array('user_id = ?', $_POST['id'])));
                     break;
+                case 'addCircle':
+                    $circles = $this->model('Circles');
+                    $circles->user_id = $_POST['user_id'];
+                    $circles->circle = '{"block": [], "friends": []}';
+                    $circles->save();
+                    break;
+                case 'sharePost':
+                    $post = $this->model('Posts');
+                    $post->user_id = $_POST['id'];
+                    $post->name = $_POST['name'];
+                    $post->post_body = $_POST['postText'];
+                    $post->file = $_POST['file'];
+                    $post->save();
+                    $last_id = $this->model('Posts')::last();
+                    $stats = $this->model('Stats');
+                    $stats->post_id = $last_id->post_id;
+
+                    $stats->stats = '{"likes": [], "comments": []}';
+                    $stats->save();
             }
         }
         $this->view('/pages/operation', $data);

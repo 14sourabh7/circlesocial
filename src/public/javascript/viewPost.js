@@ -125,6 +125,24 @@ $(document).ready(function () {
       });
     }
   });
+
+  $(".share").click(function () {
+    console.log("share");
+    $.ajax({
+      url: "/pages/operation",
+      method: "post",
+      data: {
+        action: "sharePost",
+        id: sessionStorage.getItem("user_id"),
+        name: post.name,
+        postText: post.post_body,
+        file: post.file,
+      },
+      dataType: "JSON",
+    }).done(function () {
+      console.log("done");
+    });
+  });
 });
 function getPost() {
   $.ajax({
@@ -165,7 +183,7 @@ function displayPost(post, stats) {
   Your browser does not support the video tag.
 </video>
     `);
-
+  $(".postBody").html(post.post_body);
   $(".postUser").html(post.name);
   $(".likeCnt").html(`${stats.likes.length} Likes`);
   $(".countCmnt").html(`${stats.comments.length}`);

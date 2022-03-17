@@ -17,7 +17,7 @@
     ?>
 
     <main class="form-signin w-75 mx-auto mt-2">
-        <h1 class="text-center text-danger">Sign Up Page</h1>
+        <h1 class="text-center text-dark">Sign Up Page</h1>
         <form>
             <div class="row">
                 <label for="name" class="form-label">Name:</label>
@@ -58,7 +58,7 @@
                 <input type="text" class="form-control" id="country" placeholder="Enter your country" name="country">
             </div>
             <p id='errorMsg' class="text-danger"></p>
-            <button class="btn btn-danger p-2 w-25 mt-3 signup">Submit</button>
+            <button class="btn btn-dark p-2 w-25 mt-3 signup">Submit</button>
         </form>
 
 

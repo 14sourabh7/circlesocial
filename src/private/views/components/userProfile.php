@@ -33,16 +33,31 @@
                 <!-- <div class="mt-5 text-center"><button class="btn btn-primary profile-button profileSave" type="button">Save Profile</button></div> -->
             </div>
         </div>
+
         <div class="col-md-4 border-right listFriend" style="display:none">
-            <div class="d-flex flex-column align-items-center bg-light shadow-sm text-center p-3 py-5">
-                <span class="btn text-success ">Friends</span>
-                <div class="friends">
-
+            <div class="d-flex flex-column align-items-center bg-light border-start shadow-sm text-center p-3 py-5">
+                <div style='border-bottom:1px solid gray' class="bg-light">
+                    <span class="btn text-danger fw-bold fs-4 ">Muted Friends</span>
+                    <div class="mute">
+                    </div>
                 </div>
-                <span class="btn text-success ">All Users</span>
-                <div class="users">
+                <hr>
+                <div style='border-bottom:1px solid gray' class="bg-light">
+                    <span class="btn text-success fw-bold fs-4">Unmuted Friends</span>
+                    <div class="friends">
 
+                    </div>
                 </div>
+
+                <hr>
+                <div style='border-bottom:1px solid gray' class="bg-light">
+                    <span class="btn text-dark fw-bold fs-4 ">All Users</span>
+                    <div class="users">
+
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>

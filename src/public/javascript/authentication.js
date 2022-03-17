@@ -113,8 +113,18 @@ $(document).ready(function () {
                     },
                     dataType: "JSON",
                   }).done((data) => {
-                    console.log("replacing");
-                    location.replace("/pages/authentication");
+                    $.ajax({
+                      url: "/pages/operation",
+                      method: "post",
+                      data: {
+                        action: "addCircle",
+                        user_id: data[0].user_id,
+                      },
+                      dataType: "JSON",
+                    }).done(function (response) {
+                      console.log("replacing");
+                      location.replace("/pages/authentication");
+                    });
                   });
                 }
               });

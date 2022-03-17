@@ -7,7 +7,9 @@ $(document).ready(function () {
     $(".authButton").html("SignIn");
   }
   $(".profile").html(
-    `<a href="pages/user?id=${sessionStorage.getItem("user_id")}">Profile</a>`
+    `<a class="btn  profile text-dark fw-bold " href="pages/user?id=${sessionStorage.getItem(
+      "user_id"
+    )}">Profile</a>`
   );
   $(".authButton").click(function () {
     if (sessionStorage.getItem("login") == 1) {
@@ -28,8 +30,8 @@ $(document).ready(function () {
         $(".result").show();
         console.log(data);
         for (let i = 0; i < data.length; i++) {
-          html += `<div class='col-7 mx-auto '><a class='text-dark py-4 my-4' href='/pages/user?id=${data[i].user_id}'>
-          ${data[i].name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from ${data[i].city}, ${data[i].country}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#${data[i].username}
+          html += `<div class='col-7 mx-auto px-4 py-2 '><a class='btn text-muted' href='/pages/user?id=${data[i].user_id}'>
+          ${data[i].name},-----address---${data[i].city}, ${data[i].country}----------user_id-----------#${data[i].username}
          </a>
           </div>`;
         }
@@ -71,8 +73,22 @@ $(document).ready(function () {
           user_id: sessionStorage.getItem("user_id"),
         },
         dataType: "JSON",
-      }).done(function (data) {
-        displayPosts(data);
+      }).done(function (response) {
+        $.ajax({
+          url: "/pages/operation",
+          method: "post",
+          data: {
+            action: "getCircle",
+            user_id: sessionStorage.getItem("user_id"),
+          },
+          dataType: "JSON",
+        }).done(function (data) {
+          var friends = JSON.parse(data[0].circle);
+          var friendsPost = response.filter((x) =>
+            friends.friends.includes(x.user_id)
+          );
+          displayPosts(friendsPost);
+        });
       });
     }
   });
@@ -84,18 +100,20 @@ function displayForm() {
         "user_id"
       )}&name=${sessionStorage.getItem(
     "name"
-  )}" method="post" enctype="multipart/form-data" style="display:flex; flex-direction:column; justify-content:center; align-items:center">
-
-            <div class="col-5 mx-auto">
-                <textarea name="postText" id="postText" cols="30" rows="5"></textarea>
-            </div>
-            <div class="row ">
-                <div class="col-7"> <label for="fileToUpload" class="btn btn-success ">
-                        Upload
-                        <input type="file" accept="video/*|image/*" name="fileToUpload" id="fileToUpload" style="display: none;" required>
+  )}" method="post" enctype="multipart/form-data" >
+ 
+            <div class='d-flex'>
+            <label for ='postText' class='border'>
+                <textarea name="postText" id="postText" style:'border: none;
+    outline: none;'></textarea>
+            </label>
+            
+            <div style='display:flex; flex-direction: column; justify-content:center'>
+                <label for="fileToUpload" class="btn fw-bold">upload img/video
+                        <input type="file" accept="video/*|image/*" name="fileToUpload" id="fileToUpload"  style='display:none' required>
                     </label></div>
-                <div class="col-3">
-                    <input type="submit" value="POST" class="btn btn-danger" name="submit">
+                
+                    <input type="submit" value="POST" class="btn fw-bold text-danger" name="submit">
                 </div>
             </div>
         </form>
@@ -129,10 +147,9 @@ function displayPosts(data) {
   Your browser does not support the video tag.
 </video>
             <div class="card-body">
-                <h5 class="card-title">${data[i].name}</h5>
-                <p class="card-text">${data[i].post_body}</p>
+                <h5 class="card-title text-dark">${data[i].name}</h5>
+                <p class="card-text text-dark">${data[i].post_body}</p>
             </div>
-       
             </div>
        </a>
     </div>

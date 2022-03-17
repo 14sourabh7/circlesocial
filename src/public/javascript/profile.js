@@ -3,6 +3,7 @@ var friends = [];
 $(document).ready(function () {
   var urlId = new URLSearchParams(window.location.search).get("id");
   getCircle();
+  displayProfile();
   if (sessionStorage.getItem("login") == 1) {
     $(".authButton").html("SignOut");
     if (sessionStorage.getItem("user_id") == urlId) {
@@ -36,38 +37,33 @@ $(document).ready(function () {
       circles.friends.push(urlId);
     }
     console.log(circles);
-    $.ajax({
-      url: "/pages/operation",
-      method: "post",
-      data: {
-        action: "updateCircle",
-        circles: JSON.stringify(circles),
-        id: sessionStorage.getItem("user_id"),
-      },
-      dataType: "JSON",
-    }).done(function (data) {
-      console.log(data);
-      displayProfile();
-    });
+    updateCircle();
+    displayProfile();
   });
 
   $("body").on("click", ".removeFrnd", function () {
     var id = $(this).data("id");
     var temp = circles.friends.filter((x) => x != id);
     circles.friends = temp;
-    $.ajax({
-      url: "/pages/operation",
-      method: "post",
-      data: {
-        action: "updateCircle",
-        circles: JSON.stringify(circles),
-        id: sessionStorage.getItem("user_id"),
-      },
-      dataType: "JSON",
-    }).done(function (data) {
-      console.log(data);
-      getCircle();
-    });
+    updateCircle();
+  });
+  $("body").on("click", ".muteFrnd", function () {
+    var id = $(this).data("id");
+    var block = circles.block;
+    block.push(id);
+    circles.block = block;
+    var temp = circles.friends.filter((x) => x != id);
+    circles.friends = temp;
+    updateCircle();
+  });
+  $("body").on("click", ".unmute", function () {
+    var id = $(this).data("id");
+    var friends = circles.friends;
+    friends.push(id);
+    circles.friends = friends;
+    var temp = circles.block.filter((x) => x != id);
+    circles.block = temp;
+    updateCircle();
   });
   $("body").on("click", ".addUser", function () {
     var id = $(this).data("id");
@@ -76,19 +72,7 @@ $(document).ready(function () {
       circles.friends.push(id);
     }
 
-    $.ajax({
-      url: "/pages/operation",
-      method: "post",
-      data: {
-        action: "updateCircle",
-        circles: JSON.stringify(circles),
-        id: sessionStorage.getItem("user_id"),
-      },
-      dataType: "JSON",
-    }).done(function (data) {
-      console.log(data);
-      getCircle();
-    });
+    updateCircle();
   });
 });
 
@@ -125,11 +109,33 @@ function getCircle() {
         $(".friends").append(`
         <span style='display:flex; justify-content:space-between; align-items:center'>
                         <span class='friendName me-4'>${data[0].name}</span><a class='btn text-danger removeFrnd' data-id='${data[0].user_id}'>remove</a>
-                    </span>
+                  <a class='btn text-danger muteFrnd' data-id='${data[0].user_id}'>mute</a>
+                        </span>
+        `);
+      });
+    }
+    $(".mute").html("");
+    for (let i = 0; i < circles.block.length; i++) {
+      var id = circles.block[i];
+      $.ajax({
+        url: "/pages/operation",
+        method: "post",
+        data: {
+          action: "getFriend",
+          id: id,
+        },
+        dataType: "JSON",
+      }).done(function (data) {
+        $(".mute").append(`
+        <span style='display:flex; justify-content:space-between; align-items:center'>
+                        <span class='friendName me-4'>${data[0].name}</span>
+                  <a class='btn text-success unmute' data-id='${data[0].user_id}'>unmute</a>
+                        </span>
         `);
       });
     }
   });
+
   $.ajax({
     url: "/pages/operation",
     method: "post",
@@ -177,5 +183,21 @@ function displayProfile() {
     $(".city").val(data[0].city);
     $(".country").val(data[0].country);
     $(".pincode").val(data[0].pincode);
+  });
+}
+
+function updateCircle() {
+  $.ajax({
+    url: "/pages/operation",
+    method: "post",
+    data: {
+      action: "updateCircle",
+      circles: JSON.stringify(circles),
+      id: sessionStorage.getItem("user_id"),
+    },
+    dataType: "JSON",
+  }).done(function (data) {
+    console.log(data);
+    getCircle();
   });
 }

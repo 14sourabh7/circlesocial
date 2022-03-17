@@ -18,7 +18,7 @@
     <main class="form-signin">
         <form method="post" action="operation" style="width: 50%;" class="mx-auto mt-5">
 
-            <h1 class="h3 mt-3 fw-normal text-center">Please sign in</h1>
+            <h1 class="h3 mt-3 fw-normal text-center">Please <span class='btn btn-dark'>sign in</span></h1>
 
             <div class="form-floating mt-3 w-75 mx-auto">
                 <input type="text" class="form-control email" id="floatingInput" placeholder="name@example.com">
@@ -30,8 +30,8 @@
             </div>
             <p id='error' class='text-danger'></p>
             <br>
-            <a class="w-100 btn btn-lg btn-danger signin" type="submit">Sign in</a>
-            <a href="/pages/signup">Not a User? Sign Up</a>
+            <a class="w-100 btn btn-lg btn-dark signin" type="submit">Sign in</a>
+            <a href="/pages/signup" class="btn text-secondary">Not a User? Sign Up</a>
         </form>
     </main>
 
